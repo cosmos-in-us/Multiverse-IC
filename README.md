@@ -3,6 +3,7 @@
 This repository contains Jupyter notebooks and scripts for generating initial conditions (IC) using CAMB and MUSIC for cosmological simulations. The structure is as follows:
 
 ## Directory Structure:
+```
 .
 ├── notebooks
 │   ├── 00.box-cell-setup.ipynb
@@ -17,6 +18,7 @@ This repository contains Jupyter notebooks and scripts for generating initial co
     ├── camb_transfer_z200_w0-1.0_wa+0.0_klogint500.txt
     ├── check-power-spectrum.ipynb
     └── generate_music_input_from_camb.ipynb
+```
 
 ## Contents
 
