@@ -1,6 +1,6 @@
 # Multiverse-IC
 
-This repository is for my study, where I document importnat information and processes I do not want to forget. It contains Jupyter notebooks and scripts for generating initial conditions (IC) using CAMB and MUSIC for cosmological simulations, Multiverse. The structure is as follows:
+This repository is for my study, where I document importnat information and processes I do not want to forget. It contains Jupyter notebooks and scripts for generating initial conditions (IC) for using CAMB and MUSIC for cosmological simulations, **Multiverse**. The structure is as follows:
 
 ## Directory Structure:
 ```
