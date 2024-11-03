@@ -22,8 +22,8 @@ This repository is for my study, where I document importnat information and proc
 
 ## Contents
 
-1. `notebooks/`: Contains Jupyter notebooks that guide through various steps in setting up and analyzing initial conditions.
-   - `00.box-cell-setup.ipynb`: Initial setup for determining the box size and resolution.
+1. `notebooks/`: Contains Jupyter notebooks that guide through various steps in setting up and checking initial conditions.
+   - `00.box-cell-setup.ipynb`: Initial setup for determining the box size and resolution for simulation.
    - `01.generate_music_input_from_camb.ipynb`: Generates a MUSIC input file based on CAMB transfer functions.
    - `02.check-power-sepctrum.ipynb`: Compares power spectra from CAMB and MUSIC.
    - `03.about_normalization.ipynb`: Discusses the normalization of power spectrum in CAMB and MUSIC.
