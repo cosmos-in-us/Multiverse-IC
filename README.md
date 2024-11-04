@@ -11,11 +11,7 @@ This repository is for my study, where I document importnat information and proc
 │   ├── 02.check-power-sepctrum.ipynb
 │   └── 03.about_normalization.ipynb
 └── scripts
-    ├── camb_transfer_z200_w0-1.0_wa+0.0_klogint000_kmax20.txt
-    ├── camb_transfer_z200_w0-1.0_wa+0.0_klogint000.txt
-    ├── camb_transfer_z200_w0-1.0_wa+0.0_klogint100_kmax20.txt
-    ├── camb_transfer_z200_w0-1.0_wa+0.0_klogint100.txt
-    ├── camb_transfer_z200_w0-1.0_wa+0.0_klogint500.txt
+    ├── camb_transfer_*.txt
     ├── check-power-spectrum.ipynb
     └── generate_music_input_from_camb.ipynb
 ```
@@ -29,7 +25,7 @@ This repository is for my study, where I document importnat information and proc
    - `03.about_normalization.ipynb`: Discusses the normalization of power spectrum in CAMB and MUSIC.
 
 2. `scripts/`: Contains the condense scripts.
-   - `camb_transfer_*.txt`: CAMB transfer function files.
+   - `camb_transfer_*.txt`: CAMB transfer function files (aka. MUSIC input files).
    - `check-power-spectrum.ipynb`: Script version for comparing power spectra from CAMB and MUSIC.
    - `generate_music_input_from_camb.ipynb`: Script version for generating a MUSIC input file based on CAMB transfer functions.
 
