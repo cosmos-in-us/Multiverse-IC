@@ -1,0 +1,23 @@
+{
+    "z_start": 200,
+    "Lbox_cMpc": 131.072,
+    "Lbox_cMpc/h": 94.37183999999999,
+    "dx_fin_kpc": 1,
+    "levelmin": 10,
+    "levelmax": 17,
+    "FlagAMR": 1,
+    "FlagZoom": 0,
+    "k0": 0.05,
+    "As": 2.1646544338903384e-09,
+    "ns": 0.96,
+    "h": 0.72,
+    "bias8_z0_WMAP5": 1.26,
+    "Omega_m": 0.26,
+    "Omega_b": 0.044,
+    "Omega_k": 0.0,
+    "w0": -1,
+    "wa": 0,
+    "kmax": 24.543692606170257,
+    "k_per_logint": 0
+}
+
