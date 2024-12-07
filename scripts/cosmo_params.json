@@ -1,7 +1,7 @@
 {
     "z_start": 200,
     "dx_fin_kpc": 1,
-    "levelmin": 7,
+    "levelmin": 9,
     "FlagAMR": 1,
     "FlagZoom": 0,
     "k0": 0.05,
@@ -9,11 +9,12 @@
     "ns": 0.96,
     "h": 0.72,
     "bias8_z0_WMAP5": 1.26,
+    "sigma8_z1090_WMAP5": 0.0011775560229492243,
     "Omega_m": 0.26,
     "Omega_b": 0.044,
     "Omega_k": 0.0,
-    "w0": -1,
-    "wa": 0,
-    "k_per_logint": 0
+    "w0": -0.8,
+    "wa": -0.8,
+    "k_per_logint": 100
 }
 

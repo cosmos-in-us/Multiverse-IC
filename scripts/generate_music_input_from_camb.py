@@ -28,27 +28,54 @@ def initialize_camb_params(cosmo_params, z):
 
 def adjust_As_at_z0(pars, cosmo_params):
     
-    print("Normalization of power spectrum")
+    print("  Normalization of power spectrum at z=0")
     
     z0 = pars.Transfer.PK_redshifts[-1]  # CAMB sorts redshifts (earliest first)
     
     if z0 != 0:
-        print("  Redshifts should include 0 here, as we normalize sigma8 at z=0.")
+        print("    Redshifts should include 0 here, as we normalize sigma8 at z=0.")
         return None
 
     results = camb.get_results(pars) # get trial results
     sigma8_calc = results.get_sigma8()[-1]  # sigma8 at z=0
     sigma8_goal = cosmo_params['sigma8_z0_WMAP5']  # target sigma8 at z=0
 
-    print(f"  Target sigma8 = {sigma8_goal} at z = {z0}")
-    print(f"  Initial sigma8 = {sigma8_calc}, As = {pars.InitPower.As} (trial)")
+    print(f"    Target sigma8 = {sigma8_goal} at z = {z0}")
+    print(f"    Initial sigma8 = {sigma8_calc}, As = {pars.InitPower.As} (trial)")
 
     As = pars.InitPower.As * (sigma8_goal / sigma8_calc)**2  # new normalization
     pars.InitPower.set_params(As=As, ns=pars.InitPower.ns)  # set new parameterization
 
     results = camb.get_results(pars) # get new results
     sigma8 = results.get_sigma8()[-1]  # new sigma8 at z=0
-    print(f"  Normalized sigma8 = {sigma8}, diff={sigma8 - sigma8_goal}, As = {pars.InitPower.As} (new)")
+    print(f"    Normalized sigma8 = {sigma8}, diff={sigma8 - sigma8_goal}, As = {pars.InitPower.As} (new)")
+    
+    return pars
+
+def adjust_As_at_z1090(pars, cosmo_params):
+    
+    print("  Normalization of power spectrum at z=1090")
+
+    z1090 = pars.Transfer.PK_redshifts[0] # as CAMB sorts redshifts (earliest first)
+
+    if 1090 != pars.Transfer.PK_redshifts[0]:
+        print(f"    Redshifts should incldue 1090 here, as we normalize sigma8 at z=1090.")
+        return None
+
+    results = camb.get_results(pars)
+    sigma8_calc = results.get_sigma8()[0] # sigma8 at z=1090
+    sigma8_goal = cosmo_params['sigma8_z1090_WMAP5'] # target sigma8 at z=1090
+
+    print(f"    Target     sigma8 = {sigma8_goal} at z = {z1090}")
+    print(f"    Initial    sigma8 = {sigma8_calc}, As = {pars.InitPower.As} (trial)")
+
+    As = pars.InitPower.As * (sigma8_goal / sigma8_calc)**2 # new normalization
+    pars.InitPower.set_params(As=As, ns=pars.InitPower.ns) # set new parameterization
+
+    # Get new results and sigma8 value
+    results = camb.get_results(pars)
+    sigma8 = results.get_sigma8()[0] # new sigma8 at z=1090
+    print(f"    Normalized sigma8 = {sigma8}, diff={sigma8 - sigma8_goal}, As = {pars.InitPower.As} (new)")
     
     return pars
 
@@ -70,15 +97,15 @@ def main():
     print("Reading 'cosmo_params.json'")
     with open('cosmo_params.json', 'r') as f:
         cosmo_params = json.load(f)
-    
+
     # Calculate derived parameters
     cosmo_params['sigma8_z0_WMAP5'] = 1 / cosmo_params['bias8_z0_WMAP5']
     cosmo_params['Omega_c'] = cosmo_params['Omega_m'] - cosmo_params['Omega_b']
     cosmo_params['Omega_l'] = 1 - cosmo_params['Omega_m']
-    
+
     if cosmo_params['FlagAMR'] == 0: a_refine = np.array([])
     if cosmo_params['FlagAMR'] == 1: a_refine = np.array([0.0125, 0.025, 0.05, 0.1, 0.2, 0.4, 0.8])
-    
+
     levelmin   = cosmo_params['levelmin']
     levelmax   = levelmin + len(a_refine)
     Ncell_ini  = pow(2, levelmin)
@@ -89,32 +116,47 @@ def main():
     cosmo_params['kmax'] = np.pi * Ncell_ini / c_Lbox_Mpc
     cosmo_params['Lbox_cMpc']   = c_Lbox_Mpc
     cosmo_params['Lbox_cMpc/h'] = c_Lbox_Mpc * cosmo_params['h']
-    cosmo_params['dx_ini_ckpc']  = c_Lbox_kpc / Ncell_ini
-    cosmo_params['dx_ini_kpc'] = 1/(cosmo_params['z_start']+1) * c_Lbox_kpc / Ncell_ini
-    
-    print("  Lbox [cMpc] = ", cosmo_params['Lbox_cMpc'])
-    print("  Lbox [cMpc/h] = ", cosmo_params['Lbox_cMpc/h'])
-    print("  dx_fin [kpc] = ", cosmo_params['dx_fin_kpc'])
-    print("  dx_ini [kpc] = ", cosmo_params['dx_ini_kpc'])
-    print("  dx_ini [ckpc] = ", cosmo_params['dx_ini_ckpc'])
+    cosmo_params['dx_ini_ckpc'] = c_Lbox_kpc / Ncell_ini
+    cosmo_params['dx_ini_kpc']  = 1/(cosmo_params['z_start']+1) * c_Lbox_kpc / Ncell_ini
 
-    save_cosmo_params(cosmo_params)
+    print("  Simulation parameters:")
+    print("    levelmin = ", cosmo_params['levelmin'])
+    print("    levelmax = ", cosmo_params['levelmax'])
+    print("    Lbox [cMpc] = ", cosmo_params['Lbox_cMpc'])
+    print("    Lbox [cMpc/h] = ", cosmo_params['Lbox_cMpc/h'])
+    print("    dx_fin [kpc] = ", cosmo_params['dx_fin_kpc'])
+    print("    dx_ini [kpc] = ", cosmo_params['dx_ini_kpc'])
+    print("    dx_ini [ckpc] = ", cosmo_params['dx_ini_ckpc'])
+
+    print("  Cosmological parameters:")
+    print("    h = ", cosmo_params['h'])
+    print("    Omega_b = ", cosmo_params['Omega_b'])
+    print("    Omega_c = ", cosmo_params['Omega_c'])
+    print("    Omega_l = ", cosmo_params['Omega_l'])
+    print("    Omega_k = ", cosmo_params['Omega_k'])
+    print("    bias8_0 = ", cosmo_params['bias8_z0_WMAP5'])
+    print("    w0 = ", cosmo_params['w0'])
+    print("    wa = ", cosmo_params['wa'])
 
 
-    print("\nStart generating CAMB power spectrum")
+    print("\nStarting to generate CAMB power spectrum")
     
     # Set interest redshifts
-    z = [cosmo_params['z_start'], 150, 100, 20, 10, 1, 0]
+    z = [1090, cosmo_params['z_start'], 0] # should contain [1090, z_start, 0]
     z.sort(reverse=True) # descending order
     print(f"  Set redshifts: ", z)
 
-    # Generate trial result
+    # Generate trial result (with trial As)
     pars    = initialize_camb_params(cosmo_params, z=z) # initialize
-    pars    = adjust_As_at_z0(pars, cosmo_params) # normalization
-    cosmo_params['As'] = pars.InitPower.As  # update the As value
+    pars    = adjust_As_at_z1090(pars, cosmo_params) # normalization at z_{CMB} = 1090
+#     pars    = adjust_As_at_z0(pars, cosmo_params) # normalization at z = 0
+    cosmo_params['As'] = pars.InitPower.As # update the As value
     
-    # Generate final result
-    print("Generating final result")
+    save_cosmo_params(cosmo_params)
+
+
+    # Generate final result (with new As)
+    print("\nGenerating final result")
     results = camb.get_results(pars)
     transfers = results.get_matter_transfer_data()
     T = transfers.transfer_data  # Shape: [var, k, z]
@@ -131,9 +173,9 @@ def main():
     fname = f"camb_transfer_z{z[iz]:03.0f}_cpl{plus_w0}{cosmo_params['w0']:.1f}{plus_wa}{cosmo_params['wa']:.1f}_lmin{cosmo_params['levelmin']:02d}.txt"
     
     # Save transfer function data
-    header = "\n".join([f"{key}: {value}" for key, value in cosmo_params.items()])
+    header = "\n".join([f"{key}: {value}" for key, value in sorted(cosmo_params.items())])
     np.savetxt(f"./{fname}", T[:, :, iz].T, header=header)
-    print(f"MUSIC input data created: ./{fname}")
+    print(f"Saving MUSIC input data: ./{fname}")
 
 if __name__ == "__main__":
     main()
